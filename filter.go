@@ -9,20 +9,19 @@ func FilterSrc(
 	ret = func() (any, Src, error) {
 		var value any
 		var err error
-	step_src:
-		if src != nil {
+		for src != nil {
 			value, src, err = src()
 			if err != nil {
 				return nil, nil, err
 			}
-			if value == nil {
-				goto step_src
+			if value != nil {
+				break
 			}
 		}
-		if value == nil {
+		if src == nil && value == nil {
 			return nil, cont, nil
 		}
-		if !predict(value) {
+		if value != nil && !predict(value) {
 			value = nil
 		}
 		return value, ret, nil

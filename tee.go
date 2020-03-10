@@ -13,14 +13,13 @@ func TeeSrc(
 	ret = func() (any, Src, error) {
 		var value any
 		var err error
-	step_src:
-		if src != nil {
+		for src != nil {
 			value, src, err = src()
 			if err != nil {
 				return nil, nil, err
 			}
-			if value == nil {
-				goto step_src
+			if value != nil {
+				break
 			}
 		}
 		for i := 0; i < len(sinks); {
