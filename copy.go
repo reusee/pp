@@ -1,19 +1,10 @@
 package pp
 
 func Copy(src Src, sinks ...Sink) error {
-	var err error
 	for {
-
-		var value any
-		for value == nil {
-			if src != nil {
-				value, src, err = src()
-				if err != nil {
-					return err
-				}
-			} else {
-				break
-			}
+		value, err := src.Next()
+		if err != nil {
+			return err
 		}
 
 		if len(sinks) > 0 {

@@ -7,16 +7,9 @@ func FilterSrc(
 ) Src {
 	var ret Src
 	ret = func() (any, Src, error) {
-		var value any
-		var err error
-		for src != nil {
-			value, src, err = src()
-			if err != nil {
-				return nil, nil, err
-			}
-			if value != nil {
-				break
-			}
+		value, err := src.Next()
+		if err != nil {
+			return nil, nil, err
 		}
 		if src == nil && value == nil {
 			return nil, cont, nil
