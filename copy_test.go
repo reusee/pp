@@ -77,3 +77,41 @@ func TestCopyToMultipleSinks(t *testing.T) {
 		t.Fatalf("got %d, %v", len(s3), s3)
 	}
 }
+
+func TestCopyMultipleValues(t *testing.T) {
+	var provide Src
+	ints := []int{1, 2, 3}
+	provide = func() (any, Src, error) {
+		if len(ints) == 0 {
+			return nil, nil, nil
+		}
+		i := ints[0]
+		ints = ints[1:]
+		return i, provide, nil
+	}
+	consume := func(target *int, cont Sink) Sink {
+		return func(value any) (Sink, error) {
+			*target = value.(int)
+			return cont, nil
+		}
+	}
+	var a, b int
+	if err := Copy(
+		provide,
+		consume(&a, consume(&b, nil)),
+	); err != nil {
+		t.Fatal(err)
+	}
+	if a != 1 {
+		t.Fatal()
+	}
+	if b != 2 {
+		t.Fatal()
+	}
+	if len(ints) != 1 {
+		t.Fatal()
+	}
+	if ints[0] != 3 {
+		t.Fatal()
+	}
+}
