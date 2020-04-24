@@ -14,36 +14,49 @@ func TestCatSrc(t *testing.T) {
 		}
 		return src
 	}
-	collect := func(ints *[]int) Sink {
-		var sink Sink
-		sink = func(v any) (Sink, error) {
-			if v == nil {
-				return nil, nil
-			}
-			*ints = append(*ints, v.(int))
-			return sink, nil
+
+	collect := func(p *int) Sink {
+		return func(value any) (Sink, error) {
+			*p = value.(int)
+			return nil, nil
 		}
-		return sink
 	}
 
-	var ints []int
+	var a, b, c, d, e, f int
 	if err := Copy(
 		CatSrc(
 			seq(0, 1),
 			seq(1, 3),
 			seq(3, 6),
 		),
-		collect(&ints),
+		CatSink(
+			collect(&a),
+			collect(&b),
+			collect(&c),
+			collect(&d),
+			collect(&e),
+			collect(&f),
+		),
 	); err != nil {
 		t.Fatal(err)
 	}
-	if len(ints) != 6 {
+	if a != 0 {
 		t.Fatal()
 	}
-	for i, n := range ints {
-		if n != i {
-			t.Fatal()
-		}
+	if b != 1 {
+		t.Fatal()
+	}
+	if c != 2 {
+		t.Fatal()
+	}
+	if d != 3 {
+		t.Fatal()
+	}
+	if e != 4 {
+		t.Fatal()
+	}
+	if f != 5 {
+		t.Fatal()
 	}
 
 }

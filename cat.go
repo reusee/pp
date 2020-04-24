@@ -20,3 +20,25 @@ func CatSrc(srcs ...Src) Src {
 	}
 	return fn
 }
+
+func CatSink(sinks ...Sink) Sink {
+	var ret Sink
+	ret = func(value any) (Sink, error) {
+		if len(sinks) == 0 {
+			return nil, nil
+		}
+		if value == nil {
+			return nil, nil
+		}
+		var err error
+		sinks[0], err = sinks[0](value)
+		if err != nil {
+			return nil, err
+		}
+		if sinks[0] == nil {
+			sinks = sinks[1:]
+		}
+		return ret, nil
+	}
+	return ret
+}
