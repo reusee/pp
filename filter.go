@@ -28,6 +28,9 @@ func FilterSink(
 ) Sink {
 	var ret Sink
 	ret = func(value any) (Sink, error) {
+		if value != nil && sink == nil {
+			return nil, ErrShortSink
+		}
 		var err error
 		if value == nil || predict(value) {
 			if sink == nil {

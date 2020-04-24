@@ -25,10 +25,12 @@ func MapSrc(
 func MapSink(
 	sink Sink,
 	fn func(any) any,
-	cont Sink,
 ) Sink {
 	var ret Sink
 	ret = func(value any) (Sink, error) {
+		if value != nil && sink == nil {
+			return nil, ErrShortSink
+		}
 		if value == nil {
 			return nil, nil
 		}

@@ -24,10 +24,10 @@ func CatSrc(srcs ...Src) Src {
 func CatSink(sinks ...Sink) Sink {
 	var ret Sink
 	ret = func(value any) (Sink, error) {
-		if len(sinks) == 0 {
-			return nil, nil
+		if value != nil && len(sinks) == 0 {
+			return nil, ErrShortSink
 		}
-		if value == nil {
+		if len(sinks) == 0 {
 			return nil, nil
 		}
 		var err error

@@ -31,7 +31,7 @@ func TestMap(t *testing.T) {
 		}, nil),
 		MapSink(sink, func(v any) any {
 			return v.(int) * 2
-		}, nil),
+		}),
 	); err != nil {
 		t.Fatal(err)
 	}

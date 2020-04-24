@@ -3,6 +3,9 @@ package pp
 func Alt(sinks ...Sink) Sink {
 	var sink Sink
 	sink = func(value any) (Sink, error) {
+		if value != nil && len(sinks) == 0 {
+			return nil, ErrShortSink
+		}
 		var err error
 		for i := 0; i < len(sinks); {
 			sink = sinks[i]
