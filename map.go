@@ -21,3 +21,26 @@ func MapSrc(
 	}
 	return ret
 }
+
+func MapSink(
+	sink Sink,
+	fn func(any) any,
+	cont Sink,
+) Sink {
+	var ret Sink
+	ret = func(value any) (Sink, error) {
+		if value == nil {
+			return nil, nil
+		}
+		var err error
+		sink, err = sink(fn(value))
+		if err != nil {
+			return nil, err
+		}
+		if sink == nil {
+			return nil, nil
+		}
+		return ret, nil
+	}
+	return ret
+}

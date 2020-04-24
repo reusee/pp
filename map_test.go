@@ -14,12 +14,24 @@ func TestMap(t *testing.T) {
 	}
 
 	var ints []int
+	var sink Sink
+	sink = func(value any) (Sink, error) {
+		if value == nil {
+			return nil, nil
+		}
+		ints = append(ints, value.(int))
+		return sink, nil
+	}
+
+	var ints2 []int
 	if err := Copy(
 		MapSrc(src, func(v any) any {
-			ints = append(ints, v.(int))
+			ints2 = append(ints2, v.(int))
 			return v
 		}, nil),
-		Discard,
+		MapSink(sink, func(v any) any {
+			return v.(int) * 2
+		}, nil),
 	); err != nil {
 		t.Fatal(err)
 	}
@@ -27,4 +39,15 @@ func TestMap(t *testing.T) {
 	if len(ints) != 5 {
 		t.Fatal()
 	}
+	if len(ints2) != 5 {
+		t.Fatal()
+	}
+
+	if ints2[2] != 3 {
+		t.Fatalf("got %d", ints2[2])
+	}
+	if ints[2] != 6 {
+		t.Fatalf("got %d", ints[2])
+	}
+
 }
