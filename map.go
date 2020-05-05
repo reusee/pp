@@ -31,11 +31,12 @@ func MapSink(
 		if value != nil && sink == nil {
 			return nil, ErrShortSink
 		}
-		if value == nil {
-			return nil, nil
-		}
 		var err error
-		sink, err = sink(fn(value))
+		if value != nil {
+			sink, err = sink(fn(value))
+		} else {
+			sink, err = sink(nil)
+		}
 		if err != nil {
 			return nil, err
 		}
