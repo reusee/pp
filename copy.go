@@ -1,6 +1,24 @@
 package pp
 
 func Copy(src Src, sinks ...Sink) error {
+	return CopyWithMutate(nil, src, sinks...)
+}
+
+type Mutate = func(func(Src) Src)
+
+func CopyWithMutate(
+	mutatePtr *Mutate,
+	src Src,
+	sinks ...Sink,
+) error {
+
+	if mutatePtr != nil {
+		*mutatePtr = func(fn func(Src) Src) {
+			cur := src
+			src = fn(cur)
+		}
+	}
+
 	for {
 		if len(sinks) == 0 {
 			break

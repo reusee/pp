@@ -1,6 +1,7 @@
 package pp
 
 import (
+	"fmt"
 	"strconv"
 	"testing"
 )
@@ -114,4 +115,43 @@ func TestCopyMultipleValues(t *testing.T) {
 	if ints[0] != 3 {
 		t.Fatal()
 	}
+}
+
+func TestCopyWithMutate(t *testing.T) {
+	var ones Src
+	ones = func() (any, Src, error) {
+		return 1, ones, nil
+	}
+
+	var mutate Mutate
+	var insertTwos Sink
+	var ints []int
+	insertTwos = func(v any) (Sink, error) {
+		i := v.(int)
+		ints = append(ints, i)
+		if i == 1 {
+			// insert 42 after 1
+			mutate(func(src Src) Src {
+				return func() (any, Src, error) {
+					return 42, src, nil
+				}
+			})
+		}
+		if len(ints) == 8 {
+			return nil, nil
+		}
+		return insertTwos, nil
+	}
+
+	if err := CopyWithMutate(&mutate, ones, insertTwos); err != nil {
+		t.Fatal(err)
+	}
+
+	if len(ints) != 8 {
+		t.Fatalf("got %v", ints)
+	}
+	if fmt.Sprintf("%v", ints) != "[1 42 1 42 1 42 1 42]" {
+		t.Fatalf("got %v", ints)
+	}
+
 }
