@@ -17,13 +17,7 @@ func (v Values) Iter(cont Src) Src {
 }
 
 func CollectValues(p *Values) Sink {
-	var sink Sink
-	sink = func(v any) (Sink, error) {
-		if v == nil {
-			return nil, nil
-		}
+	return Tap(func(v any) {
 		*p = append(*p, v)
-		return sink, nil
-	}
-	return sink
+	})
 }
