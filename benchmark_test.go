@@ -27,7 +27,7 @@ func BenchmarkCopy(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		if err := Copy(
-			emit(3000*10000),
+			emit(128),
 			discard,
 		); err != nil {
 			b.Fatal(err)
