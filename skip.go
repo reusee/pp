@@ -11,7 +11,9 @@ func SkipSrc(src Src, n int, cont Src) Src {
 			return nil, cont, nil
 		}
 		if n > 0 {
-			n--
+			if value != nil {
+				n--
+			}
 			return nil, ret, nil
 		}
 		return value, ret, nil
