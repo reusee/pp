@@ -14,4 +14,3 @@ func TestSeq(t *testing.T) {
 		t.Fatalf("got %d", n)
 	}
 }
-

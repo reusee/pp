@@ -47,4 +47,3 @@ func MapSink[T any](
 	}
 	return ret
 }
-

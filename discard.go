@@ -6,4 +6,3 @@ func Discard[T any](v *T) (Sink[T], error) {
 	}
 	return Discard[T], nil
 }
-

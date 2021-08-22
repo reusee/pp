@@ -6,7 +6,7 @@ func TestSkip(t *testing.T) {
 	var values Values[int]
 	if err := Copy(
 		SkipSrc(
-      Seq(1, 2, 3, 4 ,5),
+			Seq(1, 2, 3, 4, 5),
 			1,
 			nil,
 		),

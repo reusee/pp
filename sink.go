@@ -12,4 +12,3 @@ func (s Sink[T]) Sink(v *T) (Sink[T], error) {
 	}
 	return s(v)
 }
-

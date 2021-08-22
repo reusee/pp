@@ -20,4 +20,3 @@ func CapSrc[T any](src Src[T], n int, cont Src[T]) Src[T] {
 	}
 	return ret
 }
-

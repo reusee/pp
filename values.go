@@ -22,4 +22,3 @@ func CollectValues[T any](p *Values[T]) Sink[T] {
 		return nil
 	})
 }
-

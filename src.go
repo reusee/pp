@@ -17,4 +17,3 @@ func (s *Src[T]) Next() (value *T, err error) {
 	}
 	return
 }
-

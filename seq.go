@@ -12,4 +12,3 @@ func Seq[T any](values ...T) Src[T] {
 	}
 	return src
 }
-

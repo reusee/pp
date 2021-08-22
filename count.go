@@ -31,4 +31,3 @@ func CountSrc[T any](n *int, src Src[T], cont Src[T]) Src[T] {
 	}
 	return ret
 }
-
