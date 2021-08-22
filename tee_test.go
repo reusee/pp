@@ -3,23 +3,23 @@ package pp
 import "testing"
 
 func TestTee(t *testing.T) {
-	var src Src
+	var src Src[int]
 	n := 0
-	src = func() (any, Src, error) {
+	src = func() (*int, Src[int], error) {
 		if n >= 10 {
 			return nil, nil, nil
 		}
 		n++
-		return n, src, nil
+		return PtrOf(n), src, nil
 	}
 
-	collect := func(ints *[]int) Sink {
-		var sink Sink
-		sink = func(v any) (Sink, error) {
+	collect := func(ints *[]int) Sink[int] {
+		var sink Sink[int]
+		sink = func(v *int) (Sink[int], error) {
 			if v == nil {
 				return nil, nil
 			}
-			*ints = append(*ints, v.(int))
+			*ints = append(*ints, *v)
 			return sink, nil
 		}
 		return sink
@@ -32,7 +32,7 @@ func TestTee(t *testing.T) {
 			collect(&ints1),
 			collect(&ints2),
 		),
-		Discard,
+		Discard[int],
 	); err != nil {
 		t.Fatal(err)
 	}

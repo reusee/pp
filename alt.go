@@ -1,8 +1,8 @@
 package pp
 
-func Alt(sinks ...Sink) Sink {
-	var sink Sink
-	sink = func(value any) (Sink, error) {
+func Alt[T any](sinks ...Sink[T]) Sink[T] {
+	var sink Sink[T]
+	sink = func(value *T) (Sink[T], error) {
 		if value != nil && len(sinks) == 0 {
 			return nil, ErrShortSink
 		}

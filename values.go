@@ -1,24 +1,25 @@
 package pp
 
-type Values []any
+type Values[T any] []T
 
-func (v Values) Iter(cont Src) Src {
+func (v Values[T]) Iter(cont Src[T]) Src[T] {
 	n := 0
-	var src Src
-	src = func() (any, Src, error) {
+	var src Src[T]
+	src = func() (*T, Src[T], error) {
 		if n >= len(v) {
 			return nil, cont, nil
 		}
-		value := v[n]
+		value := &v[n]
 		n++
 		return value, src, nil
 	}
 	return src
 }
 
-func CollectValues(p *Values) Sink {
-	return Tap(func(v any) error {
-		*p = append(*p, v)
+func CollectValues[T any](p *Values[T]) Sink[T] {
+	return Tap(func(v *T) error {
+		*p = append(*p, *v)
 		return nil
 	})
 }
+

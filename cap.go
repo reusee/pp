@@ -1,8 +1,8 @@
 package pp
 
-func CapSrc(src Src, n int, cont Src) Src {
-	var ret Src
-	ret = func() (any, Src, error) {
+func CapSrc[T any](src Src[T], n int, cont Src[T]) Src[T] {
+	var ret Src[T]
+	ret = func() (*T, Src[T], error) {
 		if n == 0 {
 			return nil, cont, nil
 		}
@@ -20,3 +20,4 @@ func CapSrc(src Src, n int, cont Src) Src {
 	}
 	return ret
 }
+

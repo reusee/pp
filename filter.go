@@ -1,12 +1,12 @@
 package pp
 
-func FilterSrc(
-	src Src,
-	predict func(any) bool,
-	cont Src,
-) Src {
-	var ret Src
-	ret = func() (any, Src, error) {
+func FilterSrc[T any](
+	src Src[T],
+	predict func(T) bool,
+	cont Src[T],
+) Src[T] {
+	var ret Src[T]
+	ret = func() (*T, Src[T], error) {
 		value, err := src.Next()
 		if err != nil {
 			return nil, nil, err
@@ -14,7 +14,7 @@ func FilterSrc(
 		if src == nil && value == nil {
 			return nil, cont, nil
 		}
-		if value != nil && !predict(value) {
+		if value != nil && !predict(*value) {
 			value = nil
 		}
 		return value, ret, nil
@@ -22,17 +22,17 @@ func FilterSrc(
 	return ret
 }
 
-func FilterSink(
-	sink Sink,
-	predict func(any) bool,
-) Sink {
-	var ret Sink
-	ret = func(value any) (Sink, error) {
+func FilterSink[T any](
+	sink Sink[T],
+	predict func(T) bool,
+) Sink[T] {
+	var ret Sink[T]
+	ret = func(value *T) (Sink[T], error) {
 		if value != nil && sink == nil {
 			return nil, ErrShortSink
 		}
 		var err error
-		if value == nil || predict(value) {
+		if value == nil || predict(*value) {
 			if sink == nil {
 				return nil, nil
 			}

@@ -5,8 +5,8 @@ import "testing"
 func TestSeq(t *testing.T) {
 	var n int
 	if err := Copy(
-		Seq(1, 2, 3),
-		CountSink(&n),
+		Seq[int](1, 2, 3),
+		CountSink[int](&n),
 	); err != nil {
 		t.Fatal(err)
 	}
@@ -14,3 +14,4 @@ func TestSeq(t *testing.T) {
 		t.Fatalf("got %d", n)
 	}
 }
+

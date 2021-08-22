@@ -4,20 +4,20 @@ import "testing"
 
 func BenchmarkCopy(b *testing.B) {
 
-	emit := func(n int) Src {
-		var src Src
-		src = func() (any, Src, error) {
+	emit := func(n int) Src[int] {
+		var src Src[int]
+		src = func() (*int, Src[int], error) {
 			if n == 0 {
 				return nil, nil, nil
 			}
 			n--
-			return n, src, nil
+			return PtrOf(n), src, nil
 		}
 		return src
 	}
 
-	var discard Sink
-	discard = func(v any) (Sink, error) {
+	var discard Sink[int]
+	discard = func(v *int) (Sink[int], error) {
 		if v == nil {
 			return nil, nil
 		}

@@ -1,9 +1,9 @@
 package pp
 
-func CountSink(n *int) Sink {
+func CountSink[T any](n *int) Sink[T] {
 	*n = 0
-	var ret Sink
-	ret = func(value any) (Sink, error) {
+	var ret Sink[T]
+	ret = func(value *T) (Sink[T], error) {
 		if value != nil {
 			*n++
 			return ret, nil
@@ -14,10 +14,10 @@ func CountSink(n *int) Sink {
 	return ret
 }
 
-func CountSrc(n *int, src Src, cont Src) Src {
+func CountSrc[T any](n *int, src Src[T], cont Src[T]) Src[T] {
 	*n = 0
-	var ret Src
-	ret = func() (any, Src, error) {
+	var ret Src[T]
+	ret = func() (*T, Src[T], error) {
 		value, err := src.Next()
 		if err != nil {
 			return nil, nil, err
@@ -31,3 +31,4 @@ func CountSrc(n *int, src Src, cont Src) Src {
 	}
 	return ret
 }
+

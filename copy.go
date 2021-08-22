@@ -1,6 +1,6 @@
 package pp
 
-func Copy(src Src, sinks ...Sink) error {
+func Copy[T any](src Src[T], sinks ...Sink[T]) error {
 	for {
 		if len(sinks) == 0 {
 			break

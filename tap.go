@@ -1,8 +1,8 @@
 package pp
 
-func Tap(fn func(any) error) Sink {
-	var sink Sink
-	sink = func(v any) (Sink, error) {
+func Tap[T any](fn func(*T) error) Sink[T] {
+	var sink Sink[T]
+	sink = func(v *T) (Sink[T], error) {
 		if v == nil {
 			return nil, nil
 		}

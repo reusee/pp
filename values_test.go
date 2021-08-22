@@ -3,8 +3,8 @@ package pp
 import "testing"
 
 func TestValues(t *testing.T) {
-	values := Values{1, 2, 3}
-	var v2 Values
+	values := Values[int]{1, 2, 3}
+	var v2 Values[int]
 	if err := Copy(
 		values.Iter(nil),
 		CollectValues(&v2),

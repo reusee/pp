@@ -1,16 +1,16 @@
 package pp
 
-func Tee(src Src, sinks ...Sink) Src {
+func Tee[T any](src Src[T], sinks ...Sink[T]) Src[T] {
 	return TeeSrc(src, sinks, nil)
 }
 
-func TeeSrc(
-	src Src,
-	sinks []Sink,
-	cont Src,
-) Src {
-	var ret Src
-	ret = func() (any, Src, error) {
+func TeeSrc[T any](
+	src Src[T],
+	sinks []Sink[T],
+	cont Src[T],
+) Src[T] {
+	var ret Src[T]
+	ret = func() (*T, Src[T], error) {
 		value, err := src.Next()
 		if err != nil {
 			return nil, nil, err
