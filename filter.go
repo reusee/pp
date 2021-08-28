@@ -7,7 +7,7 @@ func FilterSrc[T any](
 ) Src[T] {
 	var ret Src[T]
 	ret = func() (*T, Src[T], error) {
-		value, err := src.Next()
+		value, err := Get(&src)
 		if err != nil {
 			return nil, nil, err
 		}

@@ -6,7 +6,7 @@ func Copy[T any](src Src[T], sinks ...Sink[T]) error {
 			break
 		}
 
-		value, err := src.Next()
+		value, err := Get(&src)
 		if err != nil {
 			return err
 		}

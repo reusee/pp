@@ -6,7 +6,7 @@ func CapSrc[T any](src Src[T], n int, cont Src[T]) Src[T] {
 		if n == 0 {
 			return nil, cont, nil
 		}
-		value, err := src.Next()
+		value, err := Get(&src)
 		if err != nil {
 			return nil, nil, err
 		}

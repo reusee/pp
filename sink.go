@@ -6,9 +6,12 @@ package pp
 // for higher-order Sinks, a nil input value should pass as-is to argument sinks
 type Sink[T any] func(*T) (Sink[T], error)
 
-func (s Sink[T]) Sink(v *T) (Sink[T], error) {
-	if s == nil {
-		return nil, nil
-	}
-	return s(v)
+// Put puts an element to Sink
+func Put[T any](sink *Sink[T], value *T) (err error) {
+  if sink == nil || *sink == nil {
+    return nil
+  }
+  *sink, err = (*sink)(value)
+  return
 }
+

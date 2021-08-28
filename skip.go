@@ -3,7 +3,7 @@ package pp
 func SkipSrc[T any](src Src[T], n int, cont Src[T]) Src[T] {
 	var ret Src[T]
 	ret = func() (*T, Src[T], error) {
-		value, err := src.Next()
+		value, err := Get(&src)
 		if err != nil {
 			return nil, nil, err
 		}

@@ -18,7 +18,7 @@ func CountSrc[T any](n *int, src Src[T], cont Src[T]) Src[T] {
 	*n = 0
 	var ret Src[T]
 	ret = func() (*T, Src[T], error) {
-		value, err := src.Next()
+		value, err := Get(&src)
 		if err != nil {
 			return nil, nil, err
 		}
