@@ -1,8 +1,13 @@
 package pp
 
-func Seq[T any](values ...T) Src[T] {
-	var src Src[T]
-	src = func() (*T, Src[T], error) {
+func Seq[
+	T any,
+	Src interface {
+		~func() (*T, Src, error)
+	},
+](values ...T) Src {
+	var src Src
+	src = func() (*T, Src, error) {
 		if len(values) == 0 {
 			return nil, nil, nil
 		}

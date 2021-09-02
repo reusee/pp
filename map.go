@@ -1,13 +1,18 @@
 package pp
 
-func MapSrc[T any](
-	src Src[T],
+func MapSrc[
+	T any,
+	Src interface {
+		~func() (*T, Src, error)
+	},
+](
+	src Src,
 	fn func(T) T,
-	cont Src[T],
-) Src[T] {
-	var ret Src[T]
-	ret = func() (*T, Src[T], error) {
-		value, err := Get(&src)
+	cont Src,
+) Src {
+	var ret Src
+	ret = func() (*T, Src, error) {
+		value, err := Get[T, Src](&src)
 		if err != nil {
 			return nil, nil, err
 		}

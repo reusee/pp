@@ -14,11 +14,16 @@ func CountSink[T any](n *int) Sink[T] {
 	return ret
 }
 
-func CountSrc[T any](n *int, src Src[T], cont Src[T]) Src[T] {
+func CountSrc[
+	T any,
+	Src interface {
+		~func() (*T, Src, error)
+	},
+](n *int, src Src, cont Src) Src {
 	*n = 0
-	var ret Src[T]
-	ret = func() (*T, Src[T], error) {
-		value, err := Get(&src)
+	var ret Src
+	ret = func() (*T, Src, error) {
+		value, err := Get[T, Src](&src)
 		if err != nil {
 			return nil, nil, err
 		}

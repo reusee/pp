@@ -4,9 +4,9 @@ import "testing"
 
 func BenchmarkCopy(b *testing.B) {
 
-	emit := func(n int) Src[int] {
-		var src Src[int]
-		src = func() (*int, Src[int], error) {
+	emit := func(n int) IntSrc {
+		var src IntSrc
+		src = func() (*int, IntSrc, error) {
 			if n == 0 {
 				return nil, nil, nil
 			}

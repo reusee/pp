@@ -3,9 +3,9 @@ package pp
 import "testing"
 
 func TestCatSrc(t *testing.T) {
-	seq := func(a, b int) Src[int] {
-		var src Src[int]
-		src = func() (*int, Src[int], error) {
+	seq := func(a, b int) IntSrc {
+		var src IntSrc
+		src = func() (*int, IntSrc, error) {
 			if a == b {
 				return nil, nil, nil
 			}

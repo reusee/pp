@@ -3,9 +3,9 @@ package pp
 import "testing"
 
 func TestCount(t *testing.T) {
-	var src Src[int]
+	var src IntSrc
 	n := 0
-	src = func() (*int, Src[int], error) {
+	src = func() (*int, IntSrc, error) {
 		if n >= 10 {
 			return nil, nil, nil
 		}

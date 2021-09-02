@@ -2,10 +2,15 @@ package pp
 
 type Values[T any] []T
 
-func (v Values[T]) Iter(cont Src[T]) Src[T] {
+func IterValues[
+	T any,
+	Src interface {
+		~func() (*T, Src, error)
+	},
+](v Values[T], cont Src) Src {
 	n := 0
-	var src Src[T]
-	src = func() (*T, Src[T], error) {
+	var src Src
+	src = func() (*T, Src, error) {
 		if n >= len(v) {
 			return nil, cont, nil
 		}

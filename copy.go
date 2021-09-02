@@ -1,12 +1,17 @@
 package pp
 
-func Copy[T any](src Src[T], sinks ...Sink[T]) error {
+func Copy[
+	T any,
+	Src interface {
+		~func() (*T, Src, error)
+	},
+](src Src, sinks ...Sink[T]) error {
 	for {
 		if len(sinks) == 0 {
 			break
 		}
 
-		value, err := Get(&src)
+		value, err := Get[T, Src](&src)
 		if err != nil {
 			return err
 		}

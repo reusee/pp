@@ -6,9 +6,9 @@ import (
 )
 
 func TestCopy(t *testing.T) {
-	var src Src[int]
+	var src IntSrc
 	n := 0
-	src = func() (*int, Src[int], error) {
+	src = func() (*int, IntSrc, error) {
 		if n >= 10 {
 			return nil, nil, nil
 		}
@@ -45,9 +45,9 @@ func TestCopyToMultipleSinks(t *testing.T) {
 		return sink
 	}
 
-	emit := func(n int) Src[int] {
-		var src Src[int]
-		src = func() (*int, Src[int], error) {
+	emit := func(n int) IntSrc {
+		var src IntSrc
+		src = func() (*int, IntSrc, error) {
 			if n == 0 {
 				return nil, nil, nil
 			}
@@ -79,9 +79,9 @@ func TestCopyToMultipleSinks(t *testing.T) {
 }
 
 func TestCopyMultipleValues(t *testing.T) {
-	var provide Src[int]
+	var provide IntSrc
 	ints := []int{1, 2, 3}
-	provide = func() (*int, Src[int], error) {
+	provide = func() (*int, IntSrc, error) {
 		if len(ints) == 0 {
 			return nil, nil, nil
 		}

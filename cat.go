@@ -1,8 +1,13 @@
 package pp
 
-func CatSrc[T any](srcs ...Src[T]) Src[T] {
-	var fn Src[T]
-	fn = func() (*T, Src[T], error) {
+func CatSrc[
+	T any,
+	Src interface {
+		~func() (*T, Src, error)
+	},
+](srcs ...Src) Src {
+	var fn Src
+	fn = func() (*T, Src, error) {
 		if len(srcs) == 0 {
 			return nil, nil, nil
 		}
