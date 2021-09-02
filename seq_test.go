@@ -6,7 +6,7 @@ func TestSeq(t *testing.T) {
 	var n int
 	if err := Copy(
 		Seq[int](1, 2, 3),
-		CountSink[int](&n),
+		CountSink(&n),
 	); err != nil {
 		t.Fatal(err)
 	}

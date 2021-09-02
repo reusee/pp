@@ -5,7 +5,10 @@ func Tee[
 	Src interface {
 		~func() (*T, Src, error)
 	},
-](src Src, sinks ...Sink[T]) Src {
+	Sink interface {
+		~func(*T) (Sink, error)
+	},
+](src Src, sinks ...Sink) Src {
 	return TeeSrc(src, sinks, nil)
 }
 
@@ -14,9 +17,12 @@ func TeeSrc[
 	Src interface {
 		~func() (*T, Src, error)
 	},
+	Sink interface {
+		~func(*T) (Sink, error)
+	},
 ](
 	src Src,
-	sinks []Sink[T],
+	sinks []Sink,
 	cont Src,
 ) Src {
 	var ret Src

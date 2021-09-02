@@ -14,8 +14,8 @@ func TestMap(t *testing.T) {
 	}
 
 	var ints []int
-	var sink Sink[int]
-	sink = func(value *int) (Sink[int], error) {
+	var sink IntSink
+	sink = func(value *int) (IntSink, error) {
 		if value == nil {
 			return nil, nil
 		}

@@ -15,9 +15,9 @@ func TestAlt(t *testing.T) {
 		return PtrOf(n), src, nil
 	}
 
-	countTo := func(max int, n *int) Sink[int] {
-		var sink Sink[int]
-		sink = func(v *int) (Sink[int], error) {
+	countTo := func(max int, n *int) IntSink {
+		var sink IntSink
+		sink = func(v *int) (IntSink, error) {
 			if v == nil {
 				return nil, nil
 			}

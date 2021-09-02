@@ -15,9 +15,9 @@ func TestCopy(t *testing.T) {
 		n++
 		return PtrOf(n), src, nil
 	}
-	var sink Sink[int]
+	var sink IntSink
 	ns := ""
-	sink = func(n *int) (Sink[int], error) {
+	sink = func(n *int) (IntSink, error) {
 		if n == nil {
 			return nil, nil
 		}
@@ -33,9 +33,9 @@ func TestCopy(t *testing.T) {
 }
 
 func TestCopyToMultipleSinks(t *testing.T) {
-	collect := func(ints *[]int) Sink[int] {
-		var sink Sink[int]
-		sink = func(v *int) (Sink[int], error) {
+	collect := func(ints *[]int) IntSink {
+		var sink IntSink
+		sink = func(v *int) (IntSink, error) {
 			if v == nil {
 				return nil, nil
 			}
@@ -89,8 +89,8 @@ func TestCopyMultipleValues(t *testing.T) {
 		ints = ints[1:]
 		return PtrOf(i), provide, nil
 	}
-	consume := func(target *int, cont Sink[int]) Sink[int] {
-		return func(value *int) (Sink[int], error) {
+	consume := func(target *int, cont IntSink) IntSink {
+		return func(value *int) (IntSink, error) {
 			*target = *value
 			return cont, nil
 		}

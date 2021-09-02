@@ -26,9 +26,14 @@ func CatSrc[
 	return fn
 }
 
-func CatSink[T any](sinks ...Sink[T]) Sink[T] {
-	var ret Sink[T]
-	ret = func(value *T) (Sink[T], error) {
+func CatSink[
+	T any,
+	Sink interface {
+		~func(*T) (Sink, error)
+	},
+](sinks ...Sink) Sink {
+	var ret Sink
+	ret = func(value *T) (Sink, error) {
 		if value != nil && len(sinks) == 0 {
 			return nil, ErrShortSink
 		}

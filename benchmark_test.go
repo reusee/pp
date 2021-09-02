@@ -16,8 +16,8 @@ func BenchmarkCopy(b *testing.B) {
 		return src
 	}
 
-	var discard Sink[int]
-	discard = func(v *int) (Sink[int], error) {
+	var discard IntSink
+	discard = func(v *int) (IntSink, error) {
 		if v == nil {
 			return nil, nil
 		}

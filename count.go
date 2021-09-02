@@ -1,9 +1,14 @@
 package pp
 
-func CountSink[T any](n *int) Sink[T] {
+func CountSink[
+	T any,
+	Sink interface {
+		~func(*T) (Sink, error)
+	},
+](n *int) Sink {
 	*n = 0
-	var ret Sink[T]
-	ret = func(value *T) (Sink[T], error) {
+	var ret Sink
+	ret = func(value *T) (Sink, error) {
 		if value != nil {
 			*n++
 			return ret, nil

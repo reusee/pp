@@ -15,8 +15,8 @@ func TestCatSrc(t *testing.T) {
 		return src
 	}
 
-	collect := func(p *int) Sink[int] {
-		return func(value *int) (Sink[int], error) {
+	collect := func(p *int) IntSink {
+		return func(value *int) (IntSink, error) {
 			*p = *value
 			return nil, nil
 		}

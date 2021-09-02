@@ -21,7 +21,12 @@ func IterValues[
 	return src
 }
 
-func CollectValues[T any](p *Values[T]) Sink[T] {
+func CollectValues[
+	T any,
+	Sink interface {
+		~func(*T) (Sink, error)
+	},
+](p *Values[T]) Sink {
 	return Tap(func(v *T) error {
 		*p = append(*p, *v)
 		return nil

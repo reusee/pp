@@ -13,9 +13,9 @@ func TestFilterSrc(t *testing.T) {
 		return PtrOf(n), src, nil
 	}
 
-	collect := func(ints *[]int) Sink[int] {
-		var sink Sink[int]
-		sink = func(v *int) (Sink[int], error) {
+	collect := func(ints *[]int) IntSink {
+		var sink IntSink
+		sink = func(v *int) (IntSink, error) {
 			if v == nil {
 				return nil, nil
 			}
@@ -58,9 +58,9 @@ func TestFilterSink(t *testing.T) {
 		return PtrOf(n), src, nil
 	}
 
-	collect := func(ints *[]int) Sink[int] {
-		var sink Sink[int]
-		sink = func(v *int) (Sink[int], error) {
+	collect := func(ints *[]int) IntSink {
+		var sink IntSink
+		sink = func(v *int) (IntSink, error) {
 			if v == nil {
 				return nil, nil
 			}

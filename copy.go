@@ -5,7 +5,10 @@ func Copy[
 	Src interface {
 		~func() (*T, Src, error)
 	},
-](src Src, sinks ...Sink[T]) error {
+	Sink interface {
+		~func(*T) (Sink, error)
+	},
+](src Src, sinks ...Sink) error {
 	for {
 		if len(sinks) == 0 {
 			break

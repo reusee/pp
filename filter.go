@@ -27,12 +27,17 @@ func FilterSrc[
 	return ret
 }
 
-func FilterSink[T any](
-	sink Sink[T],
+func FilterSink[
+	T any,
+	Sink interface {
+		~func(*T) (Sink, error)
+	},
+](
+	sink Sink,
 	predict func(T) bool,
-) Sink[T] {
-	var ret Sink[T]
-	ret = func(value *T) (Sink[T], error) {
+) Sink {
+	var ret Sink
+	ret = func(value *T) (Sink, error) {
 		if value != nil && sink == nil {
 			return nil, ErrShortSink
 		}
