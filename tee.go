@@ -9,7 +9,7 @@ func Tee[
 		~func(*T) (Sink, error)
 	},
 ](src Src, sinks ...Sink) Src {
-	return TeeSrc(src, sinks, nil)
+	return TeeSrc[T, Src, Sink](src, sinks, nil)
 }
 
 func TeeSrc[
