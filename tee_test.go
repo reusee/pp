@@ -26,7 +26,7 @@ func TestTee(t *testing.T) {
 	}
 
 	var ints1, ints2 []int
-	if err := Copy(
+	if err := Copy[int, IntSrc, IntSink](
 		Tee(
 			src,
 			collect(&ints1),

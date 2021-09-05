@@ -13,4 +13,11 @@ func TestSeq(t *testing.T) {
 	if n != 3 {
 		t.Fatalf("got %d", n)
 	}
+
+	if err := Copy[int, IntSrc, IntSink](
+		Seq[int, IntSrc](1, 2, 3),
+		Discard[int, IntSink],
+	); err != nil {
+		t.Fatal(err)
+	}
 }
