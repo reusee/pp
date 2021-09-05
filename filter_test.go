@@ -87,7 +87,7 @@ func TestFilterSink(t *testing.T) {
 				},
 			),
 		),
-		Discard[int],
+		Discard[int, IntSink],
 	); err != nil {
 		t.Fatal(err)
 	}

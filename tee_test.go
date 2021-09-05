@@ -32,7 +32,7 @@ func TestTee(t *testing.T) {
 			collect(&ints1),
 			collect(&ints2),
 		),
-		Discard[int],
+		Discard[int, IntSink],
 	); err != nil {
 		t.Fatal(err)
 	}

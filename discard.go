@@ -11,3 +11,4 @@ func Discard[
 	}
 	return Discard[T, Sink], nil
 }
+
