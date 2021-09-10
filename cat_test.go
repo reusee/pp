@@ -25,11 +25,14 @@ func TestCatSrc(t *testing.T) {
 	var a, b, c, d, e, f int
 	if err := Copy(
 		CatSrc(
+			nil,
 			seq(0, 1),
+			nil,
 			seq(1, 3),
 			seq(3, 6),
 		),
 		CatSink(
+			nil,
 			collect(&a),
 			collect(&b),
 			collect(&c),

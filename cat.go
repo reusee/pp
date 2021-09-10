@@ -6,20 +6,30 @@ func CatSrc[
 		~func() (*T, Src, error)
 	},
 ](srcs ...Src) Src {
+
+	if len(srcs) == 0 {
+		return nil
+	}
+
+	for srcs[0] == nil {
+		srcs = srcs[1:]
+		if len(srcs) == 0 {
+			return nil
+		}
+	}
+
 	var fn Src
 	fn = func() (*T, Src, error) {
-		if len(srcs) == 0 {
-			return nil, nil, nil
-		}
-		if srcs[0] == nil {
-			srcs = srcs[1:]
-			return nil, fn, nil
-		}
-		var value *T
-		var err error
-		value, srcs[0], err = srcs[0]()
+		value, err := Get[T, Src](&srcs[0])
 		if err != nil {
 			return nil, nil, err
+		}
+		if value == nil {
+			srcs = srcs[1:]
+			if len(srcs) == 0 {
+				return nil, nil, nil
+			}
+			return nil, fn, nil
 		}
 		return value, fn, nil
 	}
@@ -32,6 +42,18 @@ func CatSink[
 		~func(*T) (Sink, error)
 	},
 ](sinks ...Sink) Sink {
+
+	if len(sinks) == 0 {
+		return nil
+	}
+
+	for sinks[0] == nil {
+		sinks = sinks[1:]
+		if len(sinks) == 0 {
+			return nil
+		}
+	}
+
 	var ret Sink
 	ret = func(value *T) (Sink, error) {
 		if value != nil && len(sinks) == 0 {
@@ -45,8 +67,11 @@ func CatSink[
 		if err != nil {
 			return nil, err
 		}
-		if sinks[0] == nil {
+		for sinks[0] == nil {
 			sinks = sinks[1:]
+			if len(sinks) == 0 {
+				return nil, nil
+			}
 		}
 		return ret, nil
 	}
