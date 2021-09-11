@@ -27,8 +27,8 @@ func CollectValues[
 		~func(*T) (Sink, error)
 	},
 ](p *Values[T]) Sink {
-	return Tap[T, Sink](func(v *T) error {
-		*p = append(*p, *v)
+	return Tap[T, Sink](func(v T) error {
+		*p = append(*p, v)
 		return nil
 	})
 }
