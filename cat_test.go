@@ -3,21 +3,21 @@ package pp
 import "testing"
 
 func TestCatSrc(t *testing.T) {
-	seq := func(a, b int) IntSrc {
-		var src IntSrc
-		src = func() (*int, IntSrc, error) {
+	seq := func(a, b int) Src {
+		var src Src
+		src = func() (any, Src, error) {
 			if a == b {
 				return nil, nil, nil
 			}
 			a++
-			return PtrOf(a - 1), src, nil
+			return a - 1, src, nil
 		}
 		return src
 	}
 
-	collect := func(p *int) IntSink {
-		return func(value *int) (IntSink, error) {
-			*p = *value
+	collect := func(p *int) Sink {
+		return func(value any) (Sink, error) {
+			*p = value.(int)
 			return nil, nil
 		}
 	}
@@ -25,14 +25,11 @@ func TestCatSrc(t *testing.T) {
 	var a, b, c, d, e, f int
 	if err := Copy(
 		CatSrc(
-			nil,
 			seq(0, 1),
-			nil,
 			seq(1, 3),
 			seq(3, 6),
 		),
 		CatSink(
-			nil,
 			collect(&a),
 			collect(&b),
 			collect(&c),

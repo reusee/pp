@@ -3,21 +3,21 @@ package pp
 import "testing"
 
 func TestCount(t *testing.T) {
-	var src IntSrc
+	var src Src
 	n := 0
-	src = func() (*int, IntSrc, error) {
+	src = func() (any, Src, error) {
 		if n >= 10 {
 			return nil, nil, nil
 		}
 		n++
-		return PtrOf(n), src, nil
+		return n, src, nil
 	}
 
 	var c int
 	var c2 int
 	if err := Copy(
 		CountSrc(&c2, src, nil),
-		CountSink[int, IntSink](&c),
+		CountSink(&c),
 	); err != nil {
 		t.Fatal(err)
 	}

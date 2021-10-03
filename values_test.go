@@ -3,11 +3,11 @@ package pp
 import "testing"
 
 func TestValues(t *testing.T) {
-	values := Values[int]{1, 2, 3}
-	var v2 Values[int]
+	values := Values{1, 2, 3}
+	var v2 Values
 	if err := Copy(
-    IterValues[int, IntSrc](values, nil),
-		CollectValues[int, IntSink](&v2),
+		values.Iter(nil),
+		CollectValues(&v2),
 	); err != nil {
 		t.Fatal(err)
 	}

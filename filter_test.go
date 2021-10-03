@@ -3,23 +3,23 @@ package pp
 import "testing"
 
 func TestFilterSrc(t *testing.T) {
-	var src IntSrc
+	var src Src
 	n := 0
-	src = func() (*int, IntSrc, error) {
+	src = func() (any, Src, error) {
 		if n >= 10 {
 			return nil, nil, nil
 		}
 		n++
-		return PtrOf(n), src, nil
+		return n, src, nil
 	}
 
-	collect := func(ints *[]int) IntSink {
-		var sink IntSink
-		sink = func(v *int) (IntSink, error) {
+	collect := func(ints *[]int) Sink {
+		var sink Sink
+		sink = func(v any) (Sink, error) {
 			if v == nil {
 				return nil, nil
 			}
-			*ints = append(*ints, *v)
+			*ints = append(*ints, v.(int))
 			return sink, nil
 		}
 		return sink
@@ -29,8 +29,8 @@ func TestFilterSrc(t *testing.T) {
 	if err := Copy(
 		FilterSrc(
 			src,
-			func(v int) bool {
-				return v%2 == 0
+			func(v any) bool {
+				return v.(int)%2 == 0
 			},
 			nil,
 		),
@@ -48,46 +48,46 @@ func TestFilterSrc(t *testing.T) {
 }
 
 func TestFilterSink(t *testing.T) {
-	var src IntSrc
+	var src Src
 	n := 0
-	src = func() (*int, IntSrc, error) {
+	src = func() (any, Src, error) {
 		if n >= 10 {
 			return nil, nil, nil
 		}
 		n++
-		return PtrOf(n), src, nil
+		return n, src, nil
 	}
 
-	collect := func(ints *[]int) IntSink {
-		var sink IntSink
-		sink = func(v *int) (IntSink, error) {
+	collect := func(ints *[]int) Sink {
+		var sink Sink
+		sink = func(v any) (Sink, error) {
 			if v == nil {
 				return nil, nil
 			}
-			*ints = append(*ints, *v)
+			*ints = append(*ints, v.(int))
 			return sink, nil
 		}
 		return sink
 	}
 
 	var even, odd []int
-	if err := Copy[int, IntSrc, IntSink](
+	if err := Copy(
 		Tee(
 			src,
 			FilterSink(
 				collect(&even),
-				func(v int) bool {
-					return v%2 == 0
+				func(v any) bool {
+					return v.(int)%2 == 0
 				},
 			),
 			FilterSink(
 				collect(&odd),
-				func(v int) bool {
-					return v%2 != 0
+				func(v any) bool {
+					return v.(int)%2 != 0
 				},
 			),
 		),
-		Discard[int, IntSink],
+		Discard,
 	); err != nil {
 		t.Fatal(err)
 	}

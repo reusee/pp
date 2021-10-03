@@ -1,17 +1,12 @@
 package pp
 
-func CapSrc[
-	T any,
-	Src interface {
-		~func() (*T, Src, error)
-	},
-](src Src, n int, cont Src) Src {
+func CapSrc(src Src, n int, cont Src) Src {
 	var ret Src
-	ret = func() (*T, Src, error) {
+	ret = func() (any, Src, error) {
 		if n == 0 {
 			return nil, cont, nil
 		}
-		value, err := Get[T, Src](&src)
+		value, err := src.Next()
 		if err != nil {
 			return nil, nil, err
 		}

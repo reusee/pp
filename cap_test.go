@@ -3,14 +3,14 @@ package pp
 import "testing"
 
 func TestCapSrc(t *testing.T) {
-	var values Values[int]
+	var values Values
 	if err := Copy(
 		CapSrc(
-			Seq[int, IntSrc](1, 2, 3, 4, 5),
+			Seq(nil, 1, 2, nil, 3, 4, 5),
 			2,
 			nil,
 		),
-		CollectValues[int, IntSink](&values),
+		CollectValues(&values),
 	); err != nil {
 		t.Fatal(err)
 	}
@@ -27,11 +27,11 @@ func TestCapSrc(t *testing.T) {
 	values = values[:0]
 	if err := Copy(
 		CapSrc(
-			Seq[int, IntSrc](1),
+			Seq(nil, 1),
 			2,
 			nil,
 		),
-		CollectValues[int, IntSink](&values),
+		CollectValues(&values),
 	); err != nil {
 		t.Fatal(err)
 	}

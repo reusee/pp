@@ -1,13 +1,8 @@
 package pp
 
-func Alt[
-	T any,
-	Sink interface {
-		~func(*T) (Sink, error)
-	},
-](sinks ...Sink) Sink {
+func Alt(sinks ...Sink) Sink {
 	var sink Sink
-	sink = func(value *T) (Sink, error) {
+	sink = func(value any) (Sink, error) {
 		if value != nil && len(sinks) == 0 {
 			return nil, ErrShortSink
 		}

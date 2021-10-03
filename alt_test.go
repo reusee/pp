@@ -5,26 +5,26 @@ import (
 )
 
 func TestAlt(t *testing.T) {
-	var src IntSrc
+	var src Src
 	n := 0
-	src = func() (*int, IntSrc, error) {
+	src = func() (any, Src, error) {
 		if n >= 10 {
 			return nil, nil, nil
 		}
 		n++
-		return PtrOf(n), src, nil
+		return n, src, nil
 	}
 
-	countTo := func(max int, n *int) IntSink {
-		var sink IntSink
-		sink = func(v *int) (IntSink, error) {
+	countTo := func(max int, n *int) Sink {
+		var sink Sink
+		sink = func(v any) (Sink, error) {
 			if v == nil {
 				return nil, nil
 			}
-			if *v > max {
+			if v.(int) > max {
 				return nil, nil
 			}
-			*n = *v
+			*n = v.(int)
 			return sink, nil
 		}
 		return sink

@@ -1,20 +1,13 @@
 package pp
 
-func Tap[
-	T any,
-	Sink interface {
-		~func(*T) (Sink, error)
-	},
-](fn func(T) error) Sink {
+func Tap(fn func(any) error) Sink {
 	var sink Sink
-	sink = func(v *T) (Sink, error) {
+	sink = func(v any) (Sink, error) {
 		if v == nil {
 			return nil, nil
 		}
-		if v != nil {
-			if err := fn(*v); err != nil {
-				return nil, err
-			}
+		if err := fn(v); err != nil {
+			return nil, err
 		}
 		return sink, nil
 	}

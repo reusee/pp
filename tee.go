@@ -1,33 +1,17 @@
 package pp
 
-func Tee[
-	T any,
-	Src interface {
-		~func() (*T, Src, error)
-	},
-	Sink interface {
-		~func(*T) (Sink, error)
-	},
-](src Src, sinks ...Sink) Src {
-	return TeeSrc[T, Src, Sink](src, sinks, nil)
+func Tee(src Src, sinks ...Sink) Src {
+	return TeeSrc(src, sinks, nil)
 }
 
-func TeeSrc[
-	T any,
-	Src interface {
-		~func() (*T, Src, error)
-	},
-	Sink interface {
-		~func(*T) (Sink, error)
-	},
-](
+func TeeSrc(
 	src Src,
 	sinks []Sink,
 	cont Src,
 ) Src {
 	var ret Src
-	ret = func() (*T, Src, error) {
-		value, err := Get[T, Src](&src)
+	ret = func() (any, Src, error) {
+		value, err := src.Next()
 		if err != nil {
 			return nil, nil, err
 		}

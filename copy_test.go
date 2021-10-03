@@ -6,22 +6,22 @@ import (
 )
 
 func TestCopy(t *testing.T) {
-	var src IntSrc
+	var src Src
 	n := 0
-	src = func() (*int, IntSrc, error) {
+	src = func() (any, Src, error) {
 		if n >= 10 {
 			return nil, nil, nil
 		}
 		n++
-		return PtrOf(n), src, nil
+		return n, src, nil
 	}
-	var sink IntSink
+	var sink Sink
 	ns := ""
-	sink = func(n *int) (IntSink, error) {
+	sink = func(n any) (Sink, error) {
 		if n == nil {
 			return nil, nil
 		}
-		ns += strconv.Itoa(*n)
+		ns += strconv.Itoa(n.(int))
 		return sink, nil
 	}
 	if err := Copy(src, sink); err != nil {
@@ -33,26 +33,26 @@ func TestCopy(t *testing.T) {
 }
 
 func TestCopyToMultipleSinks(t *testing.T) {
-	collect := func(ints *[]int) IntSink {
-		var sink IntSink
-		sink = func(v *int) (IntSink, error) {
+	collect := func(ints *[]int) Sink {
+		var sink Sink
+		sink = func(v any) (Sink, error) {
 			if v == nil {
 				return nil, nil
 			}
-			*ints = append(*ints, *v)
+			*ints = append(*ints, v.(int))
 			return sink, nil
 		}
 		return sink
 	}
 
-	emit := func(n int) IntSrc {
-		var src IntSrc
-		src = func() (*int, IntSrc, error) {
+	emit := func(n int) Src {
+		var src Src
+		src = func() (any, Src, error) {
 			if n == 0 {
 				return nil, nil, nil
 			}
 			n--
-			return PtrOf(n), src, nil
+			return n, src, nil
 		}
 		return src
 	}
@@ -79,19 +79,19 @@ func TestCopyToMultipleSinks(t *testing.T) {
 }
 
 func TestCopyMultipleValues(t *testing.T) {
-	var provide IntSrc
+	var provide Src
 	ints := []int{1, 2, 3}
-	provide = func() (*int, IntSrc, error) {
+	provide = func() (any, Src, error) {
 		if len(ints) == 0 {
 			return nil, nil, nil
 		}
 		i := ints[0]
 		ints = ints[1:]
-		return PtrOf(i), provide, nil
+		return i, provide, nil
 	}
-	consume := func(target *int, cont IntSink) IntSink {
-		return func(value *int) (IntSink, error) {
-			*target = *value
+	consume := func(target *int, cont Sink) Sink {
+		return func(value any) (Sink, error) {
+			*target = value.(int)
 			return cont, nil
 		}
 	}

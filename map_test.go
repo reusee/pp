@@ -3,34 +3,34 @@ package pp
 import "testing"
 
 func TestMap(t *testing.T) {
-	var src IntSrc
+	var src Src
 	n := 0
-	src = func() (*int, IntSrc, error) {
+	src = func() (any, Src, error) {
 		if n == 5 {
 			return nil, nil, nil
 		}
 		n++
-		return PtrOf(n), src, nil
+		return n, src, nil
 	}
 
 	var ints []int
-	var sink IntSink
-	sink = func(value *int) (IntSink, error) {
+	var sink Sink
+	sink = func(value any) (Sink, error) {
 		if value == nil {
 			return nil, nil
 		}
-		ints = append(ints, *value)
+		ints = append(ints, value.(int))
 		return sink, nil
 	}
 
 	var ints2 []int
 	if err := Copy(
-		MapSrc(src, func(v int) int {
-			ints2 = append(ints2, v)
+		MapSrc(src, func(v any) any {
+			ints2 = append(ints2, v.(int))
 			return v
 		}, nil),
-		MapSink(sink, func(v int) int {
-			return v * 2
+		MapSink(sink, func(v any) any {
+			return v.(int) * 2
 		}),
 	); err != nil {
 		t.Fatal(err)

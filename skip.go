@@ -1,14 +1,9 @@
 package pp
 
-func SkipSrc[
-	T any,
-	Src interface {
-		~func() (*T, Src, error)
-	},
-](src Src, n int, cont Src) Src {
+func SkipSrc(src Src, n int, cont Src) Src {
 	var ret Src
-	ret = func() (*T, Src, error) {
-		value, err := Get[T, Src](&src)
+	ret = func() (any, Src, error) {
+		value, err := src.Next()
 		if err != nil {
 			return nil, nil, err
 		}

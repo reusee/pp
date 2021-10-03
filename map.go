@@ -1,18 +1,13 @@
 package pp
 
-func MapSrc[
-	T any,
-	Src interface {
-		~func() (*T, Src, error)
-	},
-](
+func MapSrc(
 	src Src,
-	fn func(T) T,
+	fn func(any) any,
 	cont Src,
 ) Src {
 	var ret Src
-	ret = func() (*T, Src, error) {
-		value, err := Get[T, Src](&src)
+	ret = func() (any, Src, error) {
+		value, err := src.Next()
 		if err != nil {
 			return nil, nil, err
 		}
@@ -20,30 +15,25 @@ func MapSrc[
 			return nil, cont, nil
 		}
 		if value != nil {
-			*value = fn(*value)
+			value = fn(value)
 		}
 		return value, ret, nil
 	}
 	return ret
 }
 
-func MapSink[
-	T any,
-	Sink interface {
-		~func(*T) (Sink, error)
-	},
-](
+func MapSink(
 	sink Sink,
-	fn func(T) T,
+	fn func(any) any,
 ) Sink {
 	var ret Sink
-	ret = func(value *T) (Sink, error) {
+	ret = func(value any) (Sink, error) {
 		if value != nil && sink == nil {
 			return nil, ErrShortSink
 		}
 		var err error
 		if value != nil {
-			sink, err = sink(PtrOf(fn(*value)))
+			sink, err = sink(fn(value))
 		} else {
 			sink, err = sink(nil)
 		}

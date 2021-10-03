@@ -1,14 +1,9 @@
 package pp
 
-func CountSink[
-	T any,
-	Sink interface {
-		~func(*T) (Sink, error)
-	},
-](n *int) Sink {
+func CountSink(n *int) Sink {
 	*n = 0
 	var ret Sink
-	ret = func(value *T) (Sink, error) {
+	ret = func(value any) (Sink, error) {
 		if value != nil {
 			*n++
 			return ret, nil
@@ -19,16 +14,11 @@ func CountSink[
 	return ret
 }
 
-func CountSrc[
-	T any,
-	Src interface {
-		~func() (*T, Src, error)
-	},
-](n *int, src Src, cont Src) Src {
+func CountSrc(n *int, src Src, cont Src) Src {
 	*n = 0
 	var ret Src
-	ret = func() (*T, Src, error) {
-		value, err := Get[T, Src](&src)
+	ret = func() (any, Src, error) {
+		value, err := src.Next()
 		if err != nil {
 			return nil, nil, err
 		}

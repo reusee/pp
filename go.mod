@@ -1,3 +1,3 @@
 module github.com/reusee/pp
 
-go 1.18
+go 1.14

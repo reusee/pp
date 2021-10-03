@@ -3,14 +3,14 @@ package pp
 import "testing"
 
 func TestSkip(t *testing.T) {
-	var values Values[int]
+	var values Values
 	if err := Copy(
 		SkipSrc(
-			Seq[int, IntSrc](1, 2, 3, 4, 5),
+			Seq(nil, 1, 2, nil, 3, 4, 5),
 			1,
 			nil,
 		),
-		CollectValues[int, IntSink](&values),
+		CollectValues(&values),
 	); err != nil {
 		t.Fatal(err)
 	}
