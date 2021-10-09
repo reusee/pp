@@ -1,10 +1,10 @@
 package pp
 
 func CatSrc[
-	T any,
 	Src interface {
 		~func() (*T, Src, error)
 	},
+	T any,
 ](srcs ...Src) Src {
 
 	if len(srcs) == 0 {
@@ -20,7 +20,7 @@ func CatSrc[
 
 	var fn Src
 	fn = func() (*T, Src, error) {
-		value, err := Get[T, Src](&srcs[0])
+		value, err := Get[Src](&srcs[0])
 		if err != nil {
 			return nil, nil, err
 		}

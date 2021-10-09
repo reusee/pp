@@ -3,10 +3,10 @@ package pp
 type Values[T any] []T
 
 func IterValues[
-	T any,
 	Src interface {
 		~func() (*T, Src, error)
 	},
+	T any,
 ](v Values[T], cont Src) Src {
 	n := 0
 	var src Src
@@ -22,12 +22,12 @@ func IterValues[
 }
 
 func CollectValues[
-	T any,
 	Sink interface {
 		~func(*T) (Sink, error)
 	},
+	T any,
 ](p *Values[T]) Sink {
-	return Tap[T, Sink](func(v T) error {
+	return Tap[Sink](func(v T) error {
 		*p = append(*p, v)
 		return nil
 	})

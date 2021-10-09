@@ -1,10 +1,10 @@
 package pp
 
 func Seq[
-	T any,
 	Src interface {
 		~func() (*T, Src, error)
 	},
+	T any,
 ](values ...T) Src {
 	var src Src
 	src = func() (*T, Src, error) {

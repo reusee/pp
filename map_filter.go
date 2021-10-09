@@ -1,10 +1,10 @@
 package pp
 
 func MapFilterSrc[
-	T any,
 	Src interface {
 		~func() (*T, Src, error)
 	},
+	T any,
 ](
 	src Src,
 	fn func(T) *T,
@@ -12,7 +12,7 @@ func MapFilterSrc[
 ) Src {
 	var ret Src
 	ret = func() (*T, Src, error) {
-		value, err := Get[T, Src](&src)
+		value, err := Get[Src](&src)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -28,10 +28,10 @@ func MapFilterSrc[
 }
 
 func MapFilterSink[
-	T any,
 	Sink interface {
 		~func(*T) (Sink, error)
 	},
+	T any,
 ](
 	sink Sink,
 	fn func(T) *T,

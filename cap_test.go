@@ -6,11 +6,11 @@ func TestCapSrc(t *testing.T) {
 	var values Values[int]
 	if err := Copy(
 		CapSrc(
-			Seq[int, IntSrc](1, 2, 3, 4, 5),
+			Seq[IntSrc](1, 2, 3, 4, 5),
 			2,
 			nil,
 		),
-		CollectValues[int, IntSink](&values),
+		CollectValues[IntSink](&values),
 	); err != nil {
 		t.Fatal(err)
 	}
@@ -31,7 +31,7 @@ func TestCapSrc(t *testing.T) {
 			2,
 			nil,
 		),
-		CollectValues[int, IntSink](&values),
+		CollectValues[IntSink](&values),
 	); err != nil {
 		t.Fatal(err)
 	}

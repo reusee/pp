@@ -1,10 +1,10 @@
 package pp
 
 func FilterSrc[
-	T any,
 	Src interface {
 		~func() (*T, Src, error)
 	},
+	T any,
 ](
 	src Src,
 	predict func(T) bool,
@@ -12,7 +12,7 @@ func FilterSrc[
 ) Src {
 	var ret Src
 	ret = func() (*T, Src, error) {
-		value, err := Get[T, Src](&src)
+		value, err := Get[Src](&src)
 		if err != nil {
 			return nil, nil, err
 		}

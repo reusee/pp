@@ -1,10 +1,10 @@
 package pp
 
 func Alt[
-	T any,
 	Sink interface {
 		~func(*T) (Sink, error)
 	},
+	T any,
 ](sinks ...Sink) Sink {
 	var sink Sink
 	sink = func(value *T) (Sink, error) {
