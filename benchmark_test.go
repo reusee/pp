@@ -34,3 +34,28 @@ func BenchmarkCopy(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkSrcNext(b *testing.B) {
+	var src Src
+	src = func() (any, Src, error) {
+		return 42, src, nil
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		v, err := src.Next()
+		_ = v
+		_ = err
+	}
+}
+
+func BenchmarkSinkSink(b *testing.B) {
+	var sink Sink
+	sink = func(v any) (Sink, error) {
+		_ = v
+		return sink, nil
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		sink, _ = sink.Sink(42)
+	}
+}
